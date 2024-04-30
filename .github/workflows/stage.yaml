@@ -35,7 +35,7 @@ jobs:
         run: docker logs my_container
 
       - name: Save container contents to artifact
-        run: docker cp my_container:/path/in/container /path/in/host
+        run: docker cp -r my_container:/path/in/container /path/in/host
 
       # - name: Cleanup
       #   run: docker rm -f my_container
