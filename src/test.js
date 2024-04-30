@@ -1,6 +1,8 @@
 import { connect } from "./index.js";
 import logger from "./module/logger.js";
 import { links } from "./module/links.js";
+import { RedisManager } from "./module/redis.js";
+import settings from "./module/cfg.cjs";
 
 let page;
 let browser;
@@ -29,10 +31,16 @@ async function main(link) {
 }
 
 async function startParsing() {
+  /**
+   * Initialize redis & connect
+   */
+  await RedisManager.connect(settings.redis);
+
   const task = [];
   let result;
 
-  for (const link of links) {
+  const values = Object.values(links);
+  for (const link of values) {
     await main(link); // ~ 1.5 seconds
 
     await new Promise((resolve) => setTimeout(resolve, 10000));
@@ -77,14 +85,24 @@ async function startParsing() {
         task.push(resultAddresses);
       } else task.push(el.address.split("/")[2]);
     }
+    await RedisManager.set(
+      Object.entries(links).find(([key, value]) => value === link)?.[0],
+      task,
+      "10m"
+    );
 
     logger.info(`End of parse link: ${link}`);
-
+    // const response = await RedisManager.select("solanaTrending");
+    // console.log(response);
     await browser.close();
   }
   return task;
 }
 
-startParsing();
-// Установка интервала на выполнение функции start() каждые 4.5 минуты
-// setInterval(startParsing, 5 * 60 * 1000); // 5 минуты в миллисекундах
+async function startParsingAndScheduleNext() {
+  await startParsing();
+  setTimeout(startParsingAndScheduleNext, 1 * 60 * 1000); // Вызываем снова через 1 минут после завершения startParsing
+}
+
+// Запускаем процесс в первый раз
+startParsingAndScheduleNext();
