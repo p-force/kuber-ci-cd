@@ -71,9 +71,9 @@ export const connect = ({
 
 
 
-        if (proxy && proxy.username && proxy.username.length > 0) {
-            await page.authenticate({ username: proxy.username, password: proxy.password });
-        }
+        // if (proxy && proxy.username && proxy.username.length > 0) {
+        //     await page.authenticate({ username: proxy.username, password: proxy.password });
+        // }
 
         var solve_status = true
 
@@ -141,11 +141,6 @@ export const connect = ({
             } catch (err) {
                 // console.log(err.message);
             }
-
-
-
-
-
 
             if (newPage && fingerprint === true) {
                 try {
