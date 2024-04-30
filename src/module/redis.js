@@ -33,7 +33,7 @@ export class Redis {
 
       const url = `redis://${configure.host}:${configure.port}`;
 
-      logger.info(`redis connect to: ${url}`);
+      logger.info(`Redis connect to: ${url}`);
 
       this.client = createClient({
         url,

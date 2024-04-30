@@ -111,7 +111,7 @@ export const connect = ({
     });
 
     browser.on("disconnected", async () => {
-      logger.info("'Browser Disconnected'");
+      logger.info("Browser Closed");
       try {
         setSolveStatus({ status: false });
       } catch (err) {}
