@@ -1,7 +1,7 @@
 # Use the official Node.js 16 image as the base image
 FROM node:16
 
-# Install necessary dependencies for running Chrome
+# Install  necessary dependencies for running Chrome
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
