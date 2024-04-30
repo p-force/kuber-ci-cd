@@ -17,7 +17,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Build Docker image
-        run: run: docker build -t paulforce/yourimage:latest .
+        run: docker build -t paulforce/yourimage:latest .
 
       - name: Run Docker container
         run: docker run yourimage:latest
