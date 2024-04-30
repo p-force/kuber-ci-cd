@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t paulforce/yourimage:latest .
+        run: docker build -t paulforce/puppeteer:latest .
 
       - name: Run Docker container
-        run: docker run yourimage:latest
+        run: docker run puppeteer:latest
