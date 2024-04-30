@@ -31,7 +31,6 @@ export const checkStat = ({ page }) => {
             clearInterval(st)
             resolve(true)
         } catch (err) {
-            // console.log(err);
             clearInterval(st)
             resolve(false)
         }

@@ -93,7 +93,7 @@ async function startParsing() {
 
     logger.info(`End of parse link: ${link}`);
     // const response = await RedisManager.select("solanaTrending");
-    // console.log(response);
+    // logger.info(err.message)
     await browser.close();
   }
   return task;

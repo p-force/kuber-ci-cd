@@ -16,11 +16,11 @@ const getTimeStamp = () => {
  */
 
 const logger = {
-  success: (message) => console.log(clc.green(getTimeStamp(), message)),
-  error: (message) => console.log(clc.red(getTimeStamp(), "[ERROR]", message)),
+  success: (message) => console.log(clc.green(getTimeStamp(), "[SUCCESS] [PUPPETEER-REAL-BROWSER] |", message)),
+  error: (message) => console.log(clc.red(getTimeStamp(), "[ERROR] [PUPPETEER-REAL-BROWSER] |", message)),
   warning: (message) =>
-    console.log(clc.yellow(getTimeStamp(), "[WARN]", message)),
-  info: (message) => console.log(clc.blue(getTimeStamp(), "[INFO]", message)),
+    console.log(clc.yellow(getTimeStamp(), "[WARNING] [PUPPETEER-REAL-BROWSER] |", message)),
+  info: (message) => console.log(clc.blue(getTimeStamp(), "[INFO] [PUPPETEER-REAL-BROWSER] |", message)),
 };
 
 export default logger;

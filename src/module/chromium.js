@@ -3,7 +3,8 @@ import chromium from "@sparticuz/chromium";
 import CDP from "chrome-remote-interface";
 import axios from "axios";
 import Xvfb from "xvfb";
-import { notice, slugify } from "./general.js";
+import {slugify } from "./general.js";
+import logger from "./logger.js";
 
 export const closeSession = async ({ xvfbsession, cdpSession, chrome }) => {
   if (xvfbsession) {
@@ -37,20 +38,16 @@ export const startSession = ({
         customConfig.executablePath || customConfig.chromePath || chromium.path;
 
       if (slugify(process.platform).includes("linux") && headless === false) {
-        notice({
-          message:
-            "This library is stable with headless: true in linuxt environment and headless: false in Windows environment. Please send headless: 'auto' for the library to work efficiently.",
-          type: "error",
-        });
+        logger.error(
+          "This library is stable with headless: true in linuxt environment and headless: false in Windows environment. Please send headless: 'auto' for the library to work efficiently."
+        );
       } else if (
         slugify(process.platform).includes("win") &&
         headless === true
       ) {
-        notice({
-          message:
-            "This library is stable with headless: true in linuxt environment and headless: false in Windows environment. Please send headless: 'auto' for the library to work efficiently.",
-          type: "error",
-        });
+        logger.error(
+          "This library is stable with headless: true in linuxt environment and headless: false in Windows environment. Please send headless: 'auto' for the library to work efficiently."
+        );
       }
 
       if (headless === "auto") {
@@ -80,12 +77,10 @@ export const startSession = ({
           });
           xvfbsession.startSync();
         } catch (err) {
-          notice({
-            message:
-              "You are running on a Linux platform but do not have xvfb installed. The browser can be captured. Please install it with the following command\n\nsudo apt-get install xvfb\n\n" +
-              err.message,
-            type: "error",
-          });
+          logger.error(
+            "You are running on a Linux platform but do not have xvfb installed. The browser can be captured. Please install it with the following command\n\nsudo apt-get install xvfb\n\n" +
+              err.message
+          );
         }
       }
 
@@ -123,7 +118,7 @@ export const startSession = ({
         xvfbsession: xvfbsession,
       });
     } catch (err) {
-      console.log(err);
+      logger.error(err)
       throw new Error(err.message);
     }
   });
