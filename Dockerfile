@@ -33,16 +33,18 @@ COPY . .
 # Открытие порта, на котором работает ваше приложение
 EXPOSE 3000
 
+CMD ["npm", "start"]
+
 # Установка и настройка SSH
-RUN mkdir -p /run/sshd /root/.ssh && \
-    ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa && \
-    cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys && \
-    chmod 600 /root/.ssh/authorized_keys && \
-    chmod 700 /root/.ssh
+# RUN mkdir -p /run/sshd /root/.ssh && \
+#     ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa && \
+#     cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys && \
+#     chmod 600 /root/.ssh/authorized_keys && \
+#     chmod 700 /root/.ssh
 
-# Открытие порта SSH
-EXPOSE 22
+# # Открытие порта SSH
+# EXPOSE 22
 
 
-# Запуск SSH-сервера
-CMD ["/usr/sbin/sshd", "-D"]
+# # Запуск SSH-сервера
+# CMD ["/usr/sbin/sshd", "-D"]
