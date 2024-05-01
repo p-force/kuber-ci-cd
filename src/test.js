@@ -93,16 +93,16 @@ async function startParsing() {
 
     logger.info(`End of parse link: ${link}`);
     const response = await RedisManager.select("solanaTrending");
-    logger.info(response);
+    logger.info(response)
     await browser.close();
   }
   return task;
 }
 
-(async () => {
+async function startParsingAndScheduleNext() {
   await startParsing();
   setTimeout(startParsingAndScheduleNext, 1 * 60 * 1000); // Вызываем снова через 1 минут после завершения startParsing
-})();
+}
 
-// // Запускаем процесс в первый раз
-// startParsingAndScheduleNext();
+// Запускаем процесс в первый раз
+startParsingAndScheduleNext();
