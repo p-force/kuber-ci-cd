@@ -66,10 +66,15 @@ jobs:
         run: docker build -t paulforce/node:latest .
 
       - name: Run Docker container
-        run: docker run -d --name my_container paulforce/node:latest
+        run: docker run -d -p 2222:22 --name my_container paulforce/node:latest
 
-      - name: Save container ID to a file
-        run: echo $(docker ps -aqf "name=my_container") > container_id.txt
+      - name: Wait for container to be ready
+        run: |
+          sleep 10  # Simple delay to allow container to initialize properly
+
+      - name: Check container status
+        run: |
+          docker ps | grep my_container || (echo "Container failed to start" && docker logs my_container && exit 1)
 
       - name: Show container logs
         run: docker logs my_container
@@ -77,9 +82,5 @@ jobs:
       - name: List files in the container
         run: docker exec my_container ls /path/to/directory
 
-      # Optional: Execute any command
       - name: Check application status inside the container
         run: docker exec my_container node your-script.js
-
-      # - name: Cleanup
-      #   run: docker rm -f my_container
