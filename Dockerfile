@@ -43,5 +43,6 @@ RUN mkdir -p /run/sshd /root/.ssh && \
 # Открытие порта SSH
 EXPOSE 22
 
+
 # Запуск SSH-сервера
 CMD ["/usr/sbin/sshd", "-D"]

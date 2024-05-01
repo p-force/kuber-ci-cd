@@ -30,8 +30,8 @@ export class Redis {
   async connect(configure) {
     try {
       this.configure = configure;
-
-      const url = `redis://${configure.host}:${configure.port}`;
+   
+      const url = `rediss://default:AXkyAAIncDE4ZDQzZTI0MGFkNDg0ODlhOWI3NDIwZmZkMzE3YjQ3N3AxMzEwMjY@leading-cat-31026.upstash.io:6379`;
 
       logger.info(`Redis connect to: ${url}`);
 
