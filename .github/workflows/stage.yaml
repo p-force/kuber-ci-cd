@@ -35,3 +35,7 @@ jobs:
       - name: Check container status
         run: |
           docker ps | grep my_container || (echo "Container failed to start" && docker logs my_container && exit 1)
+
+      - name: Display application logs
+        run: docker logs my_container
+
