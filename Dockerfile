@@ -34,7 +34,7 @@ COPY . .
 EXPOSE 3000
 
 # Установка и настройка SSH
-RUN mkdir /root/.ssh && \
+RUN mkdir -p /root/.ssh && \
     ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa && \
     cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys && \
     chmod 600 /root/.ssh/authorized_keys
