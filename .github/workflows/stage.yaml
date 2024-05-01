@@ -1,3 +1,43 @@
+# name: Docker CI/CD
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build-and-run-container:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
+
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v1
+
+#       - name: Log in to Docker Hub
+#         uses: docker/login-action@v1.10.0
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
+
+#       - name: Build Docker image
+#         run: docker build -t paulforce/node:latest .
+
+#       - name: Run Docker container
+#         run: docker run -d --name my_container paulforce/node:latest
+
+#       - name: Save container ID to a file
+#         run: echo $(docker ps -aqf "name=my_container") > container_id.txt
+
+#       - name: Show container logs
+#         run: docker logs my_container
+
+#       # - name: Cleanup
+#       #   run: docker rm -f my_container
+
+
 name: Docker CI/CD
 
 on:
@@ -33,6 +73,13 @@ jobs:
 
       - name: Show container logs
         run: docker logs my_container
+
+      - name: List files in the container
+        run: docker exec my_container ls /path/to/directory
+
+      # Optional: Execute any command
+      - name: Check application status inside the container
+        run: docker exec my_container node your-script.js
 
       # - name: Cleanup
       #   run: docker rm -f my_container
