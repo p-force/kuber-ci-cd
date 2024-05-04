@@ -6,27 +6,7 @@
   "scripts": {
     "start": "node ./src/test.js"
   },
-  "keywords": [
-    "cf-bypass",
-    "cloudflare-bypass",
-    "puppeteer-fingerprint",
-    "puppeteer-cloudflare",
-    "puppeteer-real-browser",
-    "undetectable-puppeteer",
-    "undetect",
-    "undetectable",
-    "puppeteer-undetectable",
-    "puppeteer-undetect",
-    "puppeteer-undetectable-bypass",
-    "puppeteer-undetect-bypass",
-    "puppeteer-undetectable-cloudflare",
-    "puppeteer-undetect-cloudflare",
-    "puppeteer-undetectable-cf",
-    "puppeteer-undetect-cf",
-    "puppeteer-undetectable-cf-bypass"
-  ],
-  "author": "zfc-software",
-  "license": "ISC",
+
   "dependencies": {
     "@sparticuz/chromium": "^119.0.2",
     "axios": "^1.6.7",

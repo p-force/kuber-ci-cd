@@ -22,16 +22,10 @@ export class Redis {
    * @type {redis.RedisClientType}
    */
   client;
-  /**
-   *
-   * @param configure {host: {String}, port: {Number}}
-   * @return {Promise<void>}
-   */
-  async connect(configure) {
+
+  async connect() {
     try {
-      this.configure = configure;
-   
-      const url = `rediss://default:AXkyAAIncDE4ZDQzZTI0MGFkNDg0ODlhOWI3NDIwZmZkMzE3YjQ3N3AxMzEwMjY@leading-cat-31026.upstash.io:6379`;
+      const url = `rediss://default:AZktAAIncDFkMzlmZjRiYTNiYmQ0MjE0YjNlYjM5NmJmYjljZmJiNHAxMzkyMTM@moral-crane-39213.upstash.io:6379`;
 
       logger.info(`Redis connect to: ${url}`);
 
@@ -51,46 +45,43 @@ export class Redis {
   /**
    *
    * @param messageId {Object}
-   * @param messageData {Object}
+   * @param messageArray {Array}
    * @param lifetime {string}
    */
-  async set(messageId, messageData, lifetime) {
-    // const messageUniqueId = this.configure.prefix
-    //   .concat("_")
-    //   .concat(JSON.stringify(messageId));
-
-    const message = JSON.stringify(messageData);
+  async setList(messageId, messageArray, lifetime) {
+    const key =
+      typeof messageId === "string" ? messageId : JSON.stringify(messageId);
 
     const stack = this.client.multi();
 
-    // stack.del(messageUniqueId);
-    stack.set(messageId, message);
+    // Удалить существующий список или данные по этому ключу перед добавлением новых элементов
+    stack.del(key);
 
+    for (let item of messageArray) {
+      stack.rPush(key, item);
+    }
 
     if (lifetime) {
       const lifetimeSeconds =
         this.calculateMilliseconds(lifetime)?.timestamp / 1000;
 
-      stack.expire(messageId, lifetimeSeconds);
+      stack.expire(key, lifetimeSeconds);
     }
 
     await stack.exec();
   }
 
   async select(messageId) {
-    // const messageUniqueId = this.configure.prefix
-    //   .concat("_")
-    //   .concat(JSON.stringify(messageId));
+    const key =
+      typeof messageId === "string" ? messageId : JSON.stringify(messageId);
 
-    const raw = await this.client.multi().get(messageId).exec();
-
-    if (!raw.length) {
+    const list = await this.client.lRange(key, 0, -1);
+    if (!list.length) {
       return;
     }
 
     logger.info(`${messageId} selected from cache`);
-
-    return JSON.parse(raw.shift());
+    return list;
   }
 
   calculateMilliseconds(value) {

@@ -1,37 +1,37 @@
-# Используем официальный образ Node.js 16 в качестве базового образа
-FROM node:latest
+# Use the official Node.js 16 image as the base image
+FROM node:16
 
-# Установка необходимых зависимостей для запуска Chrome
+# Install necessary dependencies for running Chrome
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
     ca-certificates \
     apt-transport-https \
     xvfb \
-    openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
-# Установка Google Chrome
+# Install Google Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
     && apt-get update \
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-# Установка рабочего каталога в контейнере
+# Set up the working directory in the container
 WORKDIR /app
 
-# Копирование файлов package.json и package-lock.json в рабочий каталог
+
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Установка зависимостей Node.js с помощью npm
+# Install Node.js dependencies
 RUN npm install
 
-# Копирование остальных файлов приложения в рабочий каталог
+# Copy the rest of the application code
 COPY . .
 
-# Открытие порта, на котором работает ваше приложение
+# Expose the port your app runs on
 EXPOSE 3000
 
+# Command to run the application
 CMD ["npm", "start"]
-

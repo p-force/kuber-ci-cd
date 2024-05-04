@@ -2,7 +2,6 @@ import { connect } from "./index.js";
 import logger from "./module/logger.js";
 import { links } from "./module/links.js";
 import { RedisManager } from "./module/redis.js";
-import settings from "./module/cfg.cjs";
 
 let page;
 let browser;
@@ -34,14 +33,17 @@ async function startParsing() {
   /**
    * Initialize redis & connect
    */
-  await RedisManager.connect(settings.redis);
+  await RedisManager.connect();
 
-  const task = [];
+  let task = [];
   let result;
+  let key;
 
   const values = Object.values(links);
   for (const link of values) {
+    task = [];
     await main(link); // ~ 1.5 seconds
+    key = link; //ссылка
 
     await new Promise((resolve) => setTimeout(resolve, 10000));
 
@@ -82,18 +84,29 @@ async function startParsing() {
           )[1];
           return element.getAttribute("href").split("token/")[1] || null;
         });
-        task.push(resultAddresses);
-      } else task.push(el.address.split("/")[2]);
+        task.push(
+          typeof resultAddresses === "string"
+            ? resultAddresses
+            : JSON.stringify(resultAddresses)
+        );
+      } else
+        task.push(
+          typeof el.address.split("/")[2] === "string"
+            ? el.address.split("/")[2]
+            : JSON.stringify(el.address.split("/")[2])
+        );
     }
-    await RedisManager.set(
-      Object.entries(links).find(([key, value]) => value === link)?.[0],
-      task,
+    await RedisManager.setList(
+      Object.entries(links).find(([_, value]) => value === key)?.[0],
+      [...new Set(task)],
       "10m"
     );
 
     logger.info(`End of parse link: ${link}`);
-    const response = await RedisManager.select("solanaTrending");
-    logger.info(response)
+    const response = await RedisManager.select(
+      Object.entries(links).find(([_, value]) => value === key)?.[0]
+    );
+    logger.info(response);
     await browser.close();
   }
   return task;
