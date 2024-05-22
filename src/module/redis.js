@@ -26,6 +26,7 @@ export class Redis {
   async connect() {
     try {
       const url = `rediss://default:AZktAAIncDFkMzlmZjRiYTNiYmQ0MjE0YjNlYjM5NmJmYjljZmJiNHAxMzkyMTM@moral-crane-39213.upstash.io:6379`;
+      // const url = "rediss://default:AXkyAAIncDE4ZDQzZTI0MGFkNDg0ODlhOWI3NDIwZmZkMzE3YjQ3N3AxMzEwMjY@leading-cat-31026.upstash.io:6379"
 
       logger.info(`Redis connect to: ${url}`);
 
@@ -63,7 +64,7 @@ export class Redis {
 
     if (lifetime) {
       const lifetimeSeconds =
-        this.calculateMilliseconds(lifetime)?.timestamp / 1000;
+        this.calculateMilliseconds(lifetime)?.timestamp / 1; 
 
       stack.expire(key, lifetimeSeconds);
     }
